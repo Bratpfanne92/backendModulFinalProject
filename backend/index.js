@@ -109,6 +109,15 @@ app.post("/addproduct", async (req, res) => {
   });
 });
 
+//Endpoint for delete products
+app.post("/removeproduct", async (req, res) => {
+  await Product.findOneAndDelete({ id: req.body.id });
+  console.log("Product Removed");
+  res.json({
+    success: true,
+    name: req.body.name,
+  });
+});
 //App listening
 app.listen(port, (error) => {
   if (!error) {
