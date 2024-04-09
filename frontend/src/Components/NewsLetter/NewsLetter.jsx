@@ -1,7 +1,17 @@
 import React from "react";
+import "./NewsLetter.css";
 
 const NewsLetter = () => {
-  return <div className="newsletter">NewsLetter</div>;
+  return (
+    <div className="newsletter">
+      <h1>Get Exclusive Offers on your Email</h1>
+      <p>Subscrube to our newsletter and styay updated</p>
+      <div className="input">
+        <input type="email" placeholder="Enter your email" />
+        <button>Subscribe</button>
+      </div>
+    </div>
+  );
 };
 
 export default NewsLetter;
