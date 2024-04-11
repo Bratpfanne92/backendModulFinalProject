@@ -32,25 +32,28 @@ const ListProduct = () => {
         <hr />
         {allproducts.map((product, index) => {
           return (
-            <div
-              key={index}
-              className="listproduct-format-main listproduct-format"
-            >
-              <img
-                src={product.image}
-                className="listproduct-product-icon"
-                alt=""
-              />
-              <p>{product.name}</p>
-              <p>€{product.old_price}</p>
-              <p>€{product.new_price}</p>
-              <p>{product.category}</p>
-              <img
-                src={cross_icon}
-                alt=""
-                className="listproduct-remove-icon"
-              />
-            </div>
+            <>
+              <div
+                key={index}
+                className="listproduct-format-main listproduct-format"
+              >
+                <img
+                  src={product.image}
+                  className="listproduct-product-icon"
+                  alt=""
+                />
+                <p>{product.name}</p>
+                <p>€{product.old_price}</p>
+                <p>€{product.new_price}</p>
+                <p>{product.category}</p>
+                <img
+                  src={cross_icon}
+                  alt=""
+                  className="listproduct-remove-icon"
+                />
+              </div>
+              <hr />
+            </>
           );
         })}
       </div>
