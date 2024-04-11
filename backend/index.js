@@ -126,6 +126,42 @@ app.get("/allproducts", async (req, res) => {
   res.send(products);
 });
 
+//Create Schema for User model
+const Users = mongoose.model("Users", {
+  name: {
+    type: String,
+    // required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    // required: true,
+  },
+  cartData: {
+    type: Object,
+    default: {},
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+//Create endpoint for user registration
+
+app.post("/signup", async (req, res) => {
+  let check = await Users.findOne({ email: req.body.email });
+  if (check) {
+    return res
+      .status(400)
+      .json({ success: false, error: "User already exists-FOUND! :)" });
+  }
+});
+
 //App listening
 app.listen(port, (error) => {
   if (!error) {
