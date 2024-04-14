@@ -17,7 +17,27 @@ const LoginSignUp = () => {
     console.log("Login Executed", formData);
   };
   const signup = async () => {
-    console.log("signup executed", formData);
+    console.log("Signup executed", formData);
+    let responseData;
+    await fetch("http://localhost:4000/signup", {
+      method: "POST",
+      headers: {
+        Accept: "application/form-data",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((data) => (responseData = data));
+
+    if (responseData.success) {
+      localStorage.setItem("auth-token", responseData.token);
+      window.location.replace("/"); //  Redirect to Home Page
+      // console.log("User Created Successfully");
+    } else {
+      alert(responseData.error);
+      // console.log(responseData.error);
+    }
   };
 
   return (
