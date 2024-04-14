@@ -207,6 +207,15 @@ app.post("/login", async (req, res) => {
   }
 });
 
+//Endpoint for NewCollection data
+
+app.get("/newcollection", async (req, res) => {
+  let products = await Product.find({});
+  let newcollection = products.slice(1).slice(-8); //get last 8 products from newCOllection db
+  console.log("New Collection Fetched");
+  res.send(newcollection);
+});
+
 //App listening
 app.listen(port, (error) => {
   if (!error) {
