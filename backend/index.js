@@ -156,10 +156,33 @@ const Users = mongoose.model("Users", {
 app.post("/signup", async (req, res) => {
   let check = await Users.findOne({ email: req.body.email });
   if (check) {
-    return res
-      .status(400)
-      .json({ success: false, error: "User already exists-FOUND! :)" });
+    return res.status(400).json({
+      success: false,
+      error: "User already exists with same email! :)",
+    });
   }
+
+  //create cart object
+  let cart = {};
+  for (let i = 0; i < 300; i++) {
+    cart[i] = 0;
+  }
+  const user = new Users({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    cartData: cart,
+  });
+
+  await user.save();
+  //jwt token
+  const data = {
+    user: {
+      id: user.id,
+    },
+  };
+  const token = jwt.sign(data, process.env.JWT_SECRET);
+  res.json({ success: true, token: token });
 });
 
 //App listening
