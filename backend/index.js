@@ -5,14 +5,16 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+
 app.use(express.json()); //parse true json
 app.use(cors()); //connect frontend and backend to 4000 port
 
+//DB connection
 const port = process.env.PORT || 3000;
 require("./dbconnect");
 
-//API creation
+//APIS:
 
 app.get("/", (req, res) => {
   res.send("Express App is running!-response ok");
@@ -223,6 +225,60 @@ app.get("/popularinwomen", async (req, res) => {
   let popular_in_women = products.slice(0, 4);
   console.log("Popular in women fetched");
   res.send(popular_in_women);
+});
+
+//Middleware for fetching user data
+//fetch user data with token verification
+const fetchUser = (req, res, next) => {
+  const token = req.header("auth-token");
+  if (!token) {
+    return res
+      .status(401)
+      .send({ error: "Please authenticate using valid token!" });
+  } else {
+    try {
+      const verified = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = verified.user;
+      next();
+    } catch (error) {
+      res.status(400).json({ success: false, error: "Token is not valid" });
+    }
+  }
+};
+
+//endpoint for adding products to cartData
+app.post("/addtocart", fetchUser, async (req, res) => {
+  console.log("Added to cart", req.body.itemId);
+  // console.log(req.body, req.user);
+  let userData = await Users.findById({ _id: req.user.id });
+  userData.cartData[req.body.itemId] += 1;
+  await Users.findByIdAndUpdate(
+    { _id: req.user.id },
+    { cartData: userData.cartData }
+  );
+  res.send("Added to Cart");
+});
+
+//endpiint for removing products from cartData
+
+app.post("/removefromcart", fetchUser, async (req, res) => {
+  console.log("Removed from Cart", req.body.itemId);
+  let userData = await Users.findById({ _id: req.user.id });
+  if (userData.cartData[req.body.itemId] > 0)
+    userData.cartData[req.body.itemId] -= 1;
+  await Users.findByIdAndUpdate(
+    { _id: req.user.id },
+    { cartData: userData.cartData }
+  );
+  res.send("Removed from Cart");
+});
+
+//endpoint for fetching cartData
+
+app.get("/getcart", fetchUser, async (req, res) => {
+  console.log("Get Cart Data");
+  let userData = await Users.findById({ _id: req.user.id });
+  res.json(userData.cartData);
 });
 
 //App listening

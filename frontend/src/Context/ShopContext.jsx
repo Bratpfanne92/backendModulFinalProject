@@ -20,12 +20,41 @@ const ShopContextProvider = (props) => {
     fetch("http://localhost:4000/allproducts")
       .then((res) => res.json())
       .then((data) => setAll_Product(data));
+
+    if (localStorage.getItem("auth-token")) {
+      fetch("http://localhost:4000/getcart", {
+        method: "GET",
+        headers: {
+          Accept: "application/form-data",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/json",
+        },
+        body: "",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setCartItems(data);
+        });
+    }
   }, []);
 
   const addToCart = (itemId) => {
-    setCartItems((prev) => {
-      return { ...prev, [itemId]: prev[itemId] + 1 };
-    });
+    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+    if (localStorage.getItem("auth-token")) {
+      fetch("http://localhost:4000/addtocart", {
+        method: "POST",
+        headers: {
+          Accept: "application/form-data",
+          "Content-Type": "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+        },
+        body: JSON.stringify({
+          itemId: itemId,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
   };
 
   const removeFromCart = (itemId) => {
@@ -33,6 +62,21 @@ const ShopContextProvider = (props) => {
       ...prev,
       [itemId]: prev[itemId] - 1,
     }));
+    if (localStorage.getItem("auth-token")) {
+      fetch("http://localhost:4000/removefromcart", {
+        method: "POST",
+        headers: {
+          Accept: "application/form-data",
+          "Content-Type": "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+        },
+        body: JSON.stringify({
+          itemId: itemId,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
   };
 
   const contextValue = { all_product };
