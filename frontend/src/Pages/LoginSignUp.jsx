@@ -13,9 +13,33 @@ const LoginSignUp = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  //create login function
   const login = async () => {
     console.log("Login Executed", formData);
+
+    let responseData;
+    await fetch("http://localhost:4000/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/form-data",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((data) => (responseData = data));
+
+    if (responseData.success) {
+      localStorage.setItem("auth-token", responseData.token);
+      window.location.replace("/"); //  Redirect to Home Page
+      // console.log("User Created Successfully");
+    } else {
+      alert(responseData.error);
+      // console.log(responseData.error);
+    }
   };
+
+  //signup function
   const signup = async () => {
     console.log("Signup executed", formData);
     let responseData;
