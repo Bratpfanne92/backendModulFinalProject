@@ -185,6 +185,28 @@ app.post("/signup", async (req, res) => {
   res.json({ success: true, token: token });
 });
 
+// endpoint for user login
+
+app.post("/login", async (req, res) => {
+  let user = await Users.findOne({ email: req.body.email });
+  if (user) {
+    const passCompare = req.body.password === user.password;
+    if (passCompare) {
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const token = jwt.sign(data, process.env.JWT_SECRET);
+      return res.json({ success: true, token: token });
+    } else {
+      return res.json({ success: false, error: "Invalid Password" });
+    }
+  } else {
+    return res.json({ success: false, error: "Invalid Email" });
+  }
+});
+
 //App listening
 app.listen(port, (error) => {
   if (!error) {
