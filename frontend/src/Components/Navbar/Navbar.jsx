@@ -4,6 +4,7 @@ import { useState } from "react";
 import "./Navbar.css";
 import logo from "../Assets/logo.png";
 import cart_icon from "../Assets/cart_icon.png";
+import LoginSignUp from "../../Pages/LoginSignUp";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("shop");
@@ -58,7 +59,9 @@ const Navbar = () => {
       </ul>
       <div className="nav-login-cart">
         <Link to="/login">
-          <button>Login</button>
+          <button>
+            <LoginSignUp />
+          </button>
         </Link>
         <Link to="/cart">
           <img src={cart_icon} alt="" />

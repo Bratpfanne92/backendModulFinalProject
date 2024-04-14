@@ -4,6 +4,21 @@ import { useState } from "react";
 
 const LoginSignUp = () => {
   const [state, setState] = useState("Login");
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    email: "",
+  });
+  const changeHandler = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const login = async () => {
+    console.log("Login Executed", formData);
+  };
+  const signup = async () => {
+    console.log("signup executed", formData);
+  };
 
   return (
     <div className="loginsignup">
@@ -11,22 +26,60 @@ const LoginSignUp = () => {
         <h1>{state}</h1>
         <div className="loginsignup-fields">
           {state === "Sign Up" ? (
-            <input type="text" placeholder="Your Name" />
+            <input
+              name="username"
+              value={formData.username}
+              onChange={changeHandler}
+              type="text"
+              placeholder="Your Name"
+            />
           ) : (
             <></>
           )}
 
-          <input type="email" placeholder="Your Email" />
-          <input type="password" placeholder="Password" />
+          <input
+            name="email"
+            value={formData.email}
+            onChange={changeHandler}
+            type="email"
+            placeholder="Your Email"
+          />
+          <input
+            name="password"
+            value={formData.password}
+            onChange={changeHandler}
+            type="password"
+            placeholder="Password"
+          />
         </div>
-        <button>Continue</button>
+        <button
+          onClick={() => {
+            state === "Login" ? login() : signup();
+          }}
+        >
+          Continue
+        </button>
         {state === "Sign Up" ? (
           <p className="loginsignup-login">
-            Already have an Account? <span>Login Here</span>
+            Already have an Account?{" "}
+            <span
+              onClick={() => {
+                setState("Login");
+              }}
+            >
+              Login Here
+            </span>
           </p>
         ) : (
           <p className="loginsignup-login">
-            Create an Account? <span>Register Here</span>
+            Create an Account?{" "}
+            <span
+              onClick={() => {
+                setState("Sign Up");
+              }}
+            >
+              Register Here
+            </span>
           </p>
         )}
 
