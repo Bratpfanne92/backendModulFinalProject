@@ -105,7 +105,7 @@ const LoginSignUp = () => {
         </button>
         {state === "Sign Up" ? (
           <p className="loginsignup-login">
-            Already have an Account?{" "}
+            Already have an Account?
             <span
               onClick={() => {
                 setState("Login");
