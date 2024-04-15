@@ -60,7 +60,7 @@
 .nav-login-cart button:active {
   background: #7a7a7a;
 }
-.nav-car-count {
+.nav-cart-count {
   width: 22px;
   height: 22px;
   display: flex;
