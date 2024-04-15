@@ -29,3 +29,16 @@
   row-gap: 80px;
   margin: 20px 170px;
 }
+.shopcategory-loadmore {
+  display: flex;
+  justify-content: center;
+  margin: 150px auto;
+  align-items: center;
+  width: 233px;
+  height: 69px;
+  border-radius: 75px;
+  background: #88898a;
+  color: #f8f9fa;
+  font-size: 20px;
+  font-weight: 600;
+}
