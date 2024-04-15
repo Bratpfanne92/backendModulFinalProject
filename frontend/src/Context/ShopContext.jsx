@@ -31,7 +31,7 @@ const ShopContextProvider = (props) => {
           "auth-token": `${localStorage.getItem("auth-token")}`,
           "Content-Type": "application/json",
         },
-        body: "",
+        // body: "",
       })
         .then((res) => res.json())
         .then((data) => {
@@ -102,7 +102,7 @@ const ShopContextProvider = (props) => {
         totalItem += cartItems[item];
       }
     }
-    return totalItems;
+    return totalItem;
   };
 
   const contextValue = {
