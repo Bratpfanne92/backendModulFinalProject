@@ -1,0 +1,23 @@
+.related {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 85vh;
+  align-items: center;
+}
+.related h1 {
+  color: #171717;
+  font-size: 48px;
+  font-weight: 600;
+}
+.related hr {
+  width: 200px;
+  height: 7px;
+  border-radius: 10px;
+  background: #252525;
+}
+.related-item {
+  margin-top: 50px;
+  gap: 25px;
+  display: flex;
+}
