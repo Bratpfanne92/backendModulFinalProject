@@ -256,7 +256,8 @@ app.post("/addtocart", fetchUser, async (req, res) => {
     { _id: req.user.id },
     { cartData: userData.cartData }
   );
-  res.send("Added to Cart");
+  // res.send("Added to Cart");
+  res.json({ message: "Added to Cart" });
 });
 
 //endpiint for removing products from cartData
@@ -270,7 +271,8 @@ app.post("/removefromcart", fetchUser, async (req, res) => {
     { _id: req.user.id },
     { cartData: userData.cartData }
   );
-  res.send("Removed from Cart");
+  // res.send("Removed from Cart");
+  res.json({ message: "Removed from Cart" });
 });
 
 //endpoint for fetching cartData
