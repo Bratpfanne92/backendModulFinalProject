@@ -262,7 +262,7 @@ const fetchUser = (req, res, next) => {
 //endpoint for adding products to cartData
 app.post("/addtocart", fetchUser, async (req, res) => {
   console.log("Added to cart", req.body.itemId);
-  // console.log(req.body, req.user);
+
   let userData = await Users.findById({ _id: req.user.id });
   userData.cartData[req.body.itemId] += 1;
   await Users.findByIdAndUpdate(
