@@ -6,6 +6,7 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 app.use(express.json()); //parse true json
 app.use(cors()); //connect frontend and backend to 4000 port
@@ -13,6 +14,9 @@ app.use(cors()); //connect frontend and backend to 4000 port
 //DB connection
 const port = process.env.PORT || 3000;
 require("./dbconnect");
+
+//bcrypt salt
+const saltRounds = 10;
 
 //APIS:
 
@@ -156,28 +160,33 @@ const Users = mongoose.model("Users", {
 //Create endpoint for user registration
 
 app.post("/signup", async (req, res) => {
-  let check = await Users.findOne({ email: req.body.email });
+  const { name, email, password } = req.body;
+  let check = await Users.findOne({ email: email });
   if (check) {
     return res.status(400).json({
       success: false,
-      error: "User already exists with same email! :)",
+      error: "User already exists with same email!",
     });
   }
 
-  //create cart object
+  const hashedPassword = await bcrypt.hash(password, saltRounds); // Hash the password
+
+  // Create cart object
   let cart = {};
   for (let i = 0; i < 300; i++) {
     cart[i] = 0;
   }
+
   const user = new Users({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
+    name: name,
+    email: email,
+    password: hashedPassword, // Store the hashed password
     cartData: cart,
   });
 
   await user.save();
-  //jwt token
+
+  // JWT token
   const data = {
     user: {
       id: user.id,
@@ -190,10 +199,14 @@ app.post("/signup", async (req, res) => {
 // endpoint for user login
 
 app.post("/login", async (req, res) => {
-  let user = await Users.findOne({ email: req.body.email });
+  const { email, password } = req.body;
+  let user = await Users.findOne({ email: email });
+
   if (user) {
-    const passCompare = req.body.password === user.password;
-    if (passCompare) {
+    // Use bcrypt.compare to check the provided password against the stored hash
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (isMatch) {
       const data = {
         user: {
           id: user.id,
